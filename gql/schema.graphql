@@ -1,0 +1,352 @@
+type AddResponse {
+    status: Boolean
+    message: String
+    _id: ID
+}
+
+type UpdateDeleteResponse {
+    status: Boolean
+    message: String
+}
+
+type Distributor {
+    _id: ID
+    id_fiscal: String
+    nombre: String
+    active: Boolean
+}
+
+type DistributorResGetAll {
+    status: Boolean
+    message: String
+    data: [Distributor]
+}
+
+input DistributorInput {
+    nombre: String!
+    id_fiscal: String!
+}
+
+input DistributorInputUpdate {
+    nombre: String
+    id_fiscal: String
+    active: Boolean
+}
+
+type RoomType {
+    _id: ID
+    nombre: String
+    active: Boolean
+}
+
+type RoomTypeResGetAll {
+    status: Boolean
+    message: String
+    data: [RoomType]
+}
+
+input RoomTypeInput {
+    nombre: String!
+}
+
+input RoomTypeInputUpdate {
+    nombre: String
+    active: Boolean
+}
+
+type Theater {
+    _id: ID
+    nombre: String
+    active: Boolean
+}
+
+type TheaterResGetAll {
+    status: Boolean
+    message: String
+    data: [Theater]
+}
+
+input TheaterInput {
+    nombre: String!
+}
+
+input TheaterInputUpdate {
+    nombre: String
+    active: Boolean
+}
+
+type MovieFormat {
+    _id: ID
+    nombre: String
+    active: Boolean
+}
+
+type MovieFormatResGetAll {
+    status: Boolean
+    message: String
+    data: [MovieFormat]
+}
+
+input MovieFormatInput {
+    nombre: String!
+}
+
+input MovieFormatInputUpdate {
+    nombre: String
+    active: Boolean
+}
+
+type Room {
+    _id: ID
+    idTheater: ID
+    nombre: String
+    numberChairs: Int
+    cleaningTime: Int
+    active: Boolean
+}
+
+type RoomResGetAll {
+    status: Boolean
+    message: String
+    data: [Room]
+}
+
+input RoomInput {
+    idTheater: ID!
+    nombre: String!
+    numberChairs: Int!
+    cleaningTime: Int!
+}
+
+input RoomInputUpdate {
+    idTheater: ID
+    nombre: String
+    numberChairs: Int
+    cleaningTime: Int
+    active: Boolean
+}
+
+type Movie {
+    _id: ID
+    idDistributor: ID
+    idsMovieFormat: [ID!]
+    nombre: String
+    duration: Int
+    active: Boolean
+}
+
+type MovieResGetAll {
+    status: Boolean
+    message: String
+    data: [Movie]
+}
+
+input MovieInput {
+    idDistributor: ID!
+    idsMovieFormat: [ID!]!
+    nombre: String!
+    duration: Int!
+}
+
+input MovieInputUpdate {
+    idDistributor: ID
+    idsMovieFormat: [ID!]
+    nombre: String
+    duration: Int
+    active: Boolean
+}
+
+type UserOption {
+    _id: ID
+    nombre: String
+    actions: [String!]
+    active: Boolean
+}
+
+type UserOptionResGetAll {
+    status: Boolean
+    message: String
+    data: [UserOption]
+}
+
+input UserOptionInput {
+    nombre: String!
+    actions: [String!]!
+}
+
+input UserOptionInputUpdate {
+    nombre: String
+    actions: [String!]
+    active: Boolean
+}
+
+type UserRol {
+    _id: ID
+    nombre: String
+    permissions: [UserRolPermission!]
+    active: Boolean
+}
+
+type UserRolPermission {
+    idUserOption: ID!
+    nameUserOption: String!
+    actions: [String!]!
+}
+
+input UserRolPermissionInput {
+    idUserOption: ID!
+    nameUserOption: String!
+    actions: [String!]!
+}
+
+type UserRolResGetAll {
+    status: Boolean
+    message: String
+    data: [UserRol]
+}
+
+input UserRolInput {
+    nombre: String!
+    permissions: [UserRolPermissionInput!]!
+}
+
+input UserRolInputUpdate {
+    nombre: String
+    permissions: [UserRolPermissionInput!]
+    active: Boolean
+}
+
+type User {
+    _id: ID
+    idTheater: ID
+    idUserRol: ID
+    fullName: String
+    email: String
+    userName: String
+    active: Boolean
+}
+
+type UserResGetAll {
+    status: Boolean
+    message: String
+    data: [User]
+}
+
+input UserInput {
+    idUserRol: ID!
+    idTheater: ID!
+    fullName: String!
+    email: String!
+    userName: String!
+    password: String!
+}
+
+input UserInputUpdate {
+    idUserRol: ID
+    idTheater: ID
+    fullName: String
+    email: String
+    userName: String
+    password: String
+    active: Boolean
+}
+
+type Login {
+    status: Boolean
+    message: String
+    token: String
+}
+
+input LoginInputGet {
+    userName: String
+    password: String
+}
+
+
+type Query {
+    "Get all distributors"
+    getAllDistributor(token: String!): DistributorResGetAll
+    "Get all room types"
+    getAllRoomType(token: String!): RoomTypeResGetAll 
+    "Get all theaters"
+    getAllTheater(token: String!): TheaterResGetAll
+    "Get all movie formats"
+    getAllMovieFormat(token: String!): MovieFormatResGetAll
+    "Get all rooms"
+    getAllRoom(token: String!): RoomResGetAll
+    "Get al movies"
+    getAllMovie(token: String!): MovieResGetAll
+    "Get all user options"
+    getAllUserOption(token: String!): UserOptionResGetAll
+    "Get all user roles"
+    getAllUserRol(token: String!): UserRolResGetAll
+    "Get all user"
+    getAllUser(token: String!): UserResGetAll
+    "Get login"
+    getLogin(input: LoginInputGet): Login
+}
+
+type Mutation {
+    "Add new distributor"
+    addDistributor(token: String!, input: DistributorInput!): AddResponse
+    "Update distributor"
+    updateDistributor(token: String!, _id: ID!, input: DistributorInputUpdate!): UpdateDeleteResponse
+    "Delete distributor"
+    deleteDistributor(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a new room type"
+    addRoomType(token: String!, input: RoomTypeInput!): AddResponse
+    "Update a room type"
+    updateRoomType(token: String!, _id: ID!, input: RoomTypeInputUpdate!): UpdateDeleteResponse
+    "Delete a room type"
+    deleteRoomType(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a new theater"
+    addTheater(token: String!, input: TheaterInput!): AddResponse
+    "Update a theater"
+    updateTheater(token: String!, _id: ID!, input: TheaterInputUpdate!): UpdateDeleteResponse
+    "Delete a theater"
+    deleteTheater(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a new movie format"
+    addMovieFormat(token: String!, input: MovieFormatInput!): AddResponse
+    "Update a movie format"
+    updateMovieFormat(token: String!, _id: ID!, input: MovieFormatInputUpdate!): UpdateDeleteResponse
+    "Delete a movie format"
+    deleteMovieFormat(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a room"
+    addRoom(token: String!, input: RoomInput!): AddResponse
+    "Update a room"
+    updateRoom(token: String!, _id: ID!, input: RoomInputUpdate!): UpdateDeleteResponse
+    "Delete a room"
+    deleteRoom(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a movie"
+    addMovie(token: String!, input: MovieInput!): AddResponse
+    "Update a movie"
+    updateMovie(token: String!, _id: ID!, input: MovieInputUpdate!): UpdateDeleteResponse
+    "Delete a movie"
+    deleteMovie(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a user option"
+    addUserOption(token: String!, input: UserOptionInput!): AddResponse
+    "Update a user option"
+    updateUserOption(token: String!, _id: ID!, input: UserOptionInputUpdate!): UpdateDeleteResponse
+    "Delete a user option"
+    deleteUserOption(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a user rol"
+    addUserRol(token: String!, input: UserRolInput!): AddResponse
+    "Update a user rol"
+    updateUserRol(token: String!, _id: ID!, input: UserRolInputUpdate!): UpdateDeleteResponse
+    "Delete a user Rol"
+    deleteUserRol(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a user"
+    addUser(token: String!, input: UserInput!): AddResponse
+    "Update a user"
+    updateUser(token: String!, _id: ID!, input: UserInputUpdate!): UpdateDeleteResponse
+    "Delete a user"
+    deleteUser(token: String!, _id: ID!): UpdateDeleteResponse
+}
