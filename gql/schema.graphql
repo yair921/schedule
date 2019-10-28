@@ -19,7 +19,8 @@ type Distributor {
 type DistributorResGetAll {
     status: Boolean
     message: String
-    data: [Distributor]
+    data: [Distributor
+    ]
 }
 
 input DistributorInput {
@@ -42,7 +43,8 @@ type RoomType {
 type RoomTypeResGetAll {
     status: Boolean
     message: String
-    data: [RoomType]
+    data: [RoomType
+    ]
 }
 
 input RoomTypeInput {
@@ -63,7 +65,8 @@ type Theater {
 type TheaterResGetAll {
     status: Boolean
     message: String
-    data: [Theater]
+    data: [Theater
+    ]
 }
 
 input TheaterInput {
@@ -84,7 +87,8 @@ type MovieFormat {
 type MovieFormatResGetAll {
     status: Boolean
     message: String
-    data: [MovieFormat]
+    data: [MovieFormat
+    ]
 }
 
 input MovieFormatInput {
@@ -108,7 +112,8 @@ type Room {
 type RoomResGetAll {
     status: Boolean
     message: String
-    data: [Room]
+    data: [Room
+    ]
 }
 
 input RoomInput {
@@ -129,7 +134,8 @@ input RoomInputUpdate {
 type Movie {
     _id: ID
     idDistributor: ID
-    idsMovieFormat: [ID!]
+    idsMovieFormat: [ID!
+    ]
     nombre: String
     duration: Int
     active: Boolean
@@ -138,19 +144,22 @@ type Movie {
 type MovieResGetAll {
     status: Boolean
     message: String
-    data: [Movie]
+    data: [Movie
+    ]
 }
 
 input MovieInput {
     idDistributor: ID!
-    idsMovieFormat: [ID!]!
+    idsMovieFormat: [ID!
+    ]!
     nombre: String!
     duration: Int!
 }
 
 input MovieInputUpdate {
     idDistributor: ID
-    idsMovieFormat: [ID!]
+    idsMovieFormat: [ID!
+    ]
     nombre: String
     duration: Int
     active: Boolean
@@ -159,60 +168,70 @@ input MovieInputUpdate {
 type UserOption {
     _id: ID
     nombre: String
-    actions: [String!]
+    actions: [String!
+    ]
     active: Boolean
 }
 
 type UserOptionResGetAll {
     status: Boolean
     message: String
-    data: [UserOption]
+    data: [UserOption
+    ]
 }
 
 input UserOptionInput {
     nombre: String!
-    actions: [String!]!
+    actions: [String!
+    ]!
 }
 
 input UserOptionInputUpdate {
     nombre: String
-    actions: [String!]
+    actions: [String!
+    ]
     active: Boolean
 }
 
 type UserRol {
     _id: ID
     nombre: String
-    permissions: [UserRolPermission!]
+    permissions: [UserRolPermission!
+    ]
     active: Boolean
 }
 
 type UserRolPermission {
     idUserOption: ID!
     nameUserOption: String!
-    actions: [String!]!
+    actions: [String!
+    ]!
 }
 
 input UserRolPermissionInput {
     idUserOption: ID!
     nameUserOption: String!
-    actions: [String!]!
+    actions: [String!
+    ]!
 }
 
 type UserRolResGetAll {
     status: Boolean
     message: String
-    data: [UserRol]
+    data: [UserRol
+    ]
 }
 
 input UserRolInput {
     nombre: String!
-    permissions: [UserRolPermissionInput!]!
+    permissions: [UserRolPermissionInput!
+    ]!
 }
 
 input UserRolInputUpdate {
     nombre: String
-    permissions: [UserRolPermissionInput!]
+    permissions: [UserRolPermissionInput!
+    ]
     active: Boolean
 }
 
@@ -229,7 +248,8 @@ type User {
 type UserResGetAll {
     status: Boolean
     message: String
-    data: [User]
+    data: [User
+    ]
 }
 
 input UserInput {
@@ -250,6 +270,109 @@ input UserInputUpdate {
     password: String
     active: Boolean
 }
+
+
+
+
+
+
+
+
+type Period {
+    _id: ID
+    flag: String
+    dateFrom: String
+    dateUp: String
+    active: Boolean
+}
+
+type PeriodResGetAll {
+    status: Boolean
+    message: String
+    data: [Period]
+}
+
+input PeriodInput {
+    flag: String
+    dateFrom: String
+    dateUp: String
+}
+
+input PeriodInputUpdate {
+    flag: String
+    dateFrom: String
+    dateUp: String
+    active: Boolean
+}
+
+
+
+
+
+type ScheduleMovies {
+    idMovie: ID
+    trailer: Boolean
+    short: Boolean
+    pattern: Boolean
+    startAt: String
+    endAt: String
+}
+
+type ScheduleRoom {
+    idRoom: ID
+    movies: [ScheduleMovies]
+}
+
+type Schedule {
+    _id: ID
+    idPeriod: ID
+    idTheater: ID
+    rooms: [ScheduleRoom]
+    active: Boolean
+}
+
+type ScheduleResGetAll {
+    status: Boolean
+    message: String
+    data: [Schedule]
+}
+
+input ScheduleMoviesInput {
+    idMovie: ID
+    trailer: Boolean
+    short: Boolean
+    pattern: Boolean
+    startAt: String
+    endAt: String
+}
+
+input ScheduleRoomInput {
+    idRoom: ID
+    movies: [ScheduleMoviesInput]
+}
+
+
+input ScheduleInput {
+    idPeriod: ID
+    idTheater: ID
+    rooms: [ScheduleRoomInput]
+}
+
+input ScheduleInputUpdate {
+    idPeriod: ID
+    idTheater: ID
+    rooms: [ScheduleRoomInput]
+    active: Boolean
+}
+
+
+
+
+
+
+
+
+
 
 type Login {
     status: Boolean
@@ -282,6 +405,10 @@ type Query {
     getAllUserRol(token: String!): UserRolResGetAll
     "Get all user"
     getAllUser(token: String!): UserResGetAll
+    "Get Period"
+    getAllPeriod(token: String!): PeriodResGetAll
+    "Get Schedule"
+    getAllSchedule(token: String!): ScheduleResGetAll
     "Get login"
     getLogin(input: LoginInputGet): Login
 }
@@ -349,4 +476,18 @@ type Mutation {
     updateUser(token: String!, _id: ID!, input: UserInputUpdate!): UpdateDeleteResponse
     "Delete a user"
     deleteUser(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a period"
+    addPeriod(token: String!, input: PeriodInput!): AddResponse
+    "Update a period"
+    updatePeriod(token: String!, _id: ID!, input: PeriodInputUpdate!): UpdateDeleteResponse
+    "Delete a period"
+    deletePeriod(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a schedule"
+    addSchedule(token: String!, input: ScheduleInput!): AddResponse
+    "Update a schedule"
+    updateSchedule(token: String!, _id: ID!, input: ScheduleInputUpdate!): UpdateDeleteResponse
+    "Delete a schedule"
+    deleteSchedule(token: String!, _id: ID!): UpdateDeleteResponse
 }

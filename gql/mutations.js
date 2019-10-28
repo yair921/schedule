@@ -7,6 +7,8 @@ const ctrMovie = require('../controllers/ctrMovie');
 const ctrUserOption = require('../controllers/ctrUserOption');
 const ctrUserRol = require('../controllers/ctrUserRol');
 const ctrUser = require('../controllers/ctrUser');
+const ctrPeriod = require('../controllers/ctrPeriod');
+const ctrSchedule = require('../controllers/ctrSchedule');
 
 module.exports = {
     addDistributor: ctrDistributor.add,
@@ -35,5 +37,11 @@ module.exports = {
     deleteUserRol: ctrUserRol.delete,
     addUser: ctrUser.add,
     updateUser: ctrUser.update,
-    deleteUser: ctrUser.delete
+    deleteUser: ctrUser.delete,
+    addPeriod: ctrPeriod.add,
+    updatePeriod: ctrPeriod.update,
+    deletePeriod: ctrPeriod.delete,
+    addSchedule: ctrSchedule.add,
+    updateSchedule: ctrSchedule.update,
+    deleteSchedule: ctrSchedule.delete
 }
