@@ -46,7 +46,55 @@ class CtrSchedule {
             };
         } catch (error) {
             errorHandler({
-                method: `${className}.add`,
+                method: `${className}.getAll`,
+                message: `Unexpected error -> ${error}`
+            });
+            return resError;
+        }
+    }
+
+    static async getOne(global, args) {
+
+        // Build object error.
+        let resError = {
+            ...config.messages.getFail,
+            data: null
+        };
+
+        // Validation permissions.
+        let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.get });
+        if (!auth.status) {
+            return {
+                ...resError,
+                message: auth.message
+            };
+        }
+
+        try {
+            let objResult = await Db.find({
+                dbName: config.db.programacion,
+                collectionName,
+                params: {
+                    enabled: true,
+                    idTheater: ObjectID(args.idTheater),
+                    idPeriod: ObjectID(args.idPeriod)
+                }
+            });
+            if (!objResult.status) {
+                errorHandler({
+                    method: `${className}.getOne`,
+                    message: `${config.messages.errorConnectionDb} -> ${objResult.message}`
+                });
+                return resError
+            }
+            return {
+                status: true,
+                message: null,
+                data: objResult.result[0]
+            };
+        } catch (error) {
+            errorHandler({
+                method: `${className}.getOne`,
                 message: `Unexpected error -> ${error}`
             });
             return resError;

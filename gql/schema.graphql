@@ -289,7 +289,8 @@ type Period {
 type PeriodResGetAll {
     status: Boolean
     message: String
-    data: [Period]
+    data: [Period
+    ]
 }
 
 input PeriodInput {
@@ -320,21 +321,30 @@ type ScheduleMovies {
 
 type ScheduleRoom {
     idRoom: ID
-    movies: [ScheduleMovies]
+    movies: [ScheduleMovies
+    ]
 }
 
 type Schedule {
     _id: ID
     idPeriod: ID
     idTheater: ID
-    rooms: [ScheduleRoom]
+    rooms: [ScheduleRoom
+    ]
     active: Boolean
 }
 
 type ScheduleResGetAll {
     status: Boolean
     message: String
-    data: [Schedule]
+    data: [Schedule
+    ]
+}
+
+type ScheduleResGetOne {
+    status: Boolean
+    message: String
+    data: Schedule
 }
 
 input ScheduleMoviesInput {
@@ -348,20 +358,23 @@ input ScheduleMoviesInput {
 
 input ScheduleRoomInput {
     idRoom: ID
-    movies: [ScheduleMoviesInput]
+    movies: [ScheduleMoviesInput
+    ]
 }
 
 
 input ScheduleInput {
     idPeriod: ID
     idTheater: ID
-    rooms: [ScheduleRoomInput]
+    rooms: [ScheduleRoomInput
+    ]
 }
 
 input ScheduleInputUpdate {
     idPeriod: ID
     idTheater: ID
-    rooms: [ScheduleRoomInput]
+    rooms: [ScheduleRoomInput
+    ]
     active: Boolean
 }
 
@@ -409,6 +422,7 @@ type Query {
     getAllPeriod(token: String!): PeriodResGetAll
     "Get Schedule"
     getAllSchedule(token: String!): ScheduleResGetAll
+    getOneSchedule(token: String!, idTheater: String!, idPeriod: String!): ScheduleResGetOne
     "Get login"
     getLogin(input: LoginInputGet): Login
 }

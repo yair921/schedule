@@ -24,5 +24,6 @@ module.exports = {
     getAllUser: ctrUser.getAll,
     getAllPeriod: ctrPeriod.getAll,
     getAllSchedule: ctrSchedule.getAll,
+    getOneSchedule: ctrSchedule.getOne,
     getLogin: ctrAuth.login
 }
