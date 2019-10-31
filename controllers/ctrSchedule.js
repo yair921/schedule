@@ -4,6 +4,8 @@ const ctrAuth = require('./ctrAuth');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
+const ctrRoom = require('./ctrRoom');
+const ctrMovie = require('./ctrMovie');
 const className = 'CtrSchedule';
 const collectionName = 'schedule';
 
@@ -87,10 +89,19 @@ class CtrSchedule {
                 });
                 return resError
             }
+            let processData = await CtrSchedule.processSchedule(objResult.result[0]);
+            //console.log(processData);
+            if (!processData.status) {
+                return {
+                    status: true,
+                    message: processData.message,
+                    data: null
+                };
+            }
             return {
                 status: true,
                 message: null,
-                data: objResult.result[0]
+                data: processData.result
             };
         } catch (error) {
             errorHandler({
@@ -99,6 +110,72 @@ class CtrSchedule {
             });
             return resError;
         }
+    }
+
+    static async processSchedule(data) {
+        try {
+            let token = null;
+            let objMovies = await ctrMovie.getAll(null, { token }, true);
+            let objRooms = await ctrRoom.getAll(null, { token }, true);
+            if (!objMovies.status || !objRooms.status) {
+                return {
+                    status: false,
+                    message: 'Error getting movies or rooms for schedule'
+                };
+            }
+
+            let rooms = objRooms.data;
+            let movies = objMovies.data;
+
+            let roomsResult = new Array();
+
+            data.rooms.forEach(room => {
+                for (let r in rooms) {
+                    if (rooms[r]._id.toString() === room.idRoom.toString()) {
+                        roomsResult.push({
+                            ...room,
+                            nombre: rooms[r].nombre,
+                            movies: CtrSchedule.getMoviesDetails(movies, room)
+                        });
+                        break;
+                    }
+                }
+            });
+
+            let result = {
+                ...data,
+                rooms: roomsResult
+            }
+            return {
+                status: true,
+                result
+            }
+        } catch (error) {
+            errorHandler({
+                method: `${className}.processSchedule`,
+                message: `Unexpected error -> ${error}`
+            });
+            return {
+                status: false,
+                message: error
+            }
+        }
+    }
+
+    static getMoviesDetails(movies, room) {
+        let moviesResult = new Array();
+        room.movies.forEach(movie => {
+            for (let m in movies) {
+                if (movies[m]._id.toString() === movie.idMovie.toString()) {
+                    moviesResult.push({
+                        ...movie,
+                        ...movies[m]
+                    });
+                    break;
+                }
+            }
+        });
+        return moviesResult;
     }
 
     static async add(global, args) {
@@ -110,7 +187,11 @@ class CtrSchedule {
         }
 
         // Validation permissions.
-        let auth = ctrAuth.validateLogin({ token: args.token, option: collectionName, action: config.actions.add });
+        let auth = ctrAuth.validateLogin({
+            token: args.token,
+            option: collectionName,
+            action: config.actions.add
+        });
         if (!auth.status) {
             return {
                 ...resError,

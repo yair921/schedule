@@ -9,19 +9,21 @@ const collectionName = 'movie';
 
 class CtrMovie {
 
-    static async getAll(global, { token }) {
+    static async getAll(global, { token }, isInternal) {
         let resError = {
             ...config.messages.getFail,
             data: null
         };
 
         // Validation permissions.
-        let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
-        if (!auth.status) {
-            return {
-                ...resError,
-                message: auth.message
-            };
+        if (!isInternal) {
+            let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
+            if (!auth.status) {
+                return {
+                    ...resError,
+                    message: auth.message
+                };
+            }
         }
 
         try {

@@ -9,7 +9,7 @@ const collectionName = 'room';
 
 class CtrRoom {
 
-    static async getAll(global, { token }) {
+    static async getAll(global, { token },isInternal) {
 
         // Build object error.
         let resError = {
@@ -18,12 +18,14 @@ class CtrRoom {
         };
 
         // Validation permissions.
-        let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
-        if (!auth.status) {
-            return {
-                ...resError,
-                message: auth.message
-            };
+        if(!isInternal){
+            let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
+            if (!auth.status) {
+                return {
+                    ...resError,
+                    message: auth.message
+                };
+            }
         }
 
         try {
