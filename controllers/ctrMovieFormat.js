@@ -43,7 +43,7 @@ class CtrMovieFormat {
             };
         } catch (error) {
             errorHandler({
-                method: `${className}.add`,
+                method: `${className}.getAll`,
                 message: `Unexpected error -> ${error}`
             });
             return resError;

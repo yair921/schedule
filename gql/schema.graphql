@@ -100,44 +100,96 @@ input MovieFormatInputUpdate {
     active: Boolean
 }
 
+
+
+
+
+
+
+type MovieLanguage {
+    _id: ID
+    movieLanguageName: String
+    active: Boolean
+}
+
+type MovieLanguageResGetAll {
+    status: Boolean
+    message: String
+    data: [MovieLanguage
+    ]
+}
+
+input MovieLanguageInput {
+    movieLanguageName: String!
+}
+
+input MovieLanguageInputUpdate {
+    movieLanguageName: String
+    active: Boolean
+}
+
+
+
+
+
+
+
 type Room {
     _id: ID
     idTheater: ID
-    nombre: String
+    roomNumber: Int
+    roomName: String
     numberChairs: Int
-    cleaningTime: Int
+    cleaningTimes: [RoomCleanigTime]
     active: Boolean
+}
+
+type RoomCleanigTime {
+    idMovieFormat: ID
+    cleaningTime: Int
 }
 
 type RoomResGetAll {
     status: Boolean
     message: String
-    data: [Room
-    ]
+    data: [Room]
+}
+
+input RoomCleanigTimeInput {
+    idMovieFormat: ID
+    cleaningTime: Int
 }
 
 input RoomInput {
     idTheater: ID!
-    nombre: String!
+    roomNumber: Int!
+    roomName: String!
     numberChairs: Int!
-    cleaningTime: Int!
+    cleaningTimes: [RoomCleanigTimeInput!]!
 }
 
 input RoomInputUpdate {
     idTheater: ID
-    nombre: String
+    roomNumber: Int
+    roomName: String
     numberChairs: Int
-    cleaningTime: Int
+    cleaningTimes: [RoomCleanigTimeInput!]
     active: Boolean
 }
+
+
+
+
 
 type Movie {
     _id: ID
     idDistributor: ID
-    idsMovieFormat: [ID!
-    ]
-    nombre: String
+    idMovieFormat: ID
+    idMovieLanguage: ID
+    systemCode: String
+    movieName: String
     duration: Int
+    rating: Int
     active: Boolean
 }
 
@@ -150,18 +202,22 @@ type MovieResGetAll {
 
 input MovieInput {
     idDistributor: ID!
-    idsMovieFormat: [ID!
-    ]!
-    nombre: String!
+    idMovieFormat: ID!
+    idMovieLanguage: ID!
+    systemCode: String
+    movieName: String!
     duration: Int!
+    rating: Int!
 }
 
 input MovieInputUpdate {
     idDistributor: ID
-    idsMovieFormat: [ID!
-    ]
-    nombre: String
+    idMovieFormat: ID
+    idMovieLanguage: ID
+    systemCode: String
+    movieName: String
     duration: Int
+    rating: Int
     active: Boolean
 }
 
@@ -312,15 +368,20 @@ input PeriodInputUpdate {
 
 type ScheduleMovies {
     idMovie: ID
-    trailer: Boolean
-    short: Boolean
-    pattern: Boolean
+    movieName: String
+    duration: Int
+    trailer: Int
+    short: Int
+    pattern: Int
+    cleaningTime: Int
     startAt: String
     endAt: String
 }
 
 type ScheduleRoom {
     idRoom: ID
+    roomNumber: Int
+    roomName: String
     movies: [ScheduleMovies
     ]
 }
@@ -349,9 +410,10 @@ type ScheduleResGetOne {
 
 input ScheduleMoviesInput {
     idMovie: ID
-    trailer: Boolean
-    short: Boolean
-    pattern: Boolean
+    trailer: Int
+    short: Int
+    pattern: Int
+    cleaningTime: Int
     startAt: String
     endAt: String
 }
@@ -408,6 +470,8 @@ type Query {
     getAllTheater(token: String!): TheaterResGetAll
     "Get all movie formats"
     getAllMovieFormat(token: String!): MovieFormatResGetAll
+    "Get all movie language"
+    getAllMovieLanguage(token: String!): MovieLanguageResGetAll
     "Get all rooms"
     getAllRoom(token: String!): RoomResGetAll
     "Get al movies"
@@ -455,6 +519,13 @@ type Mutation {
     updateMovieFormat(token: String!, _id: ID!, input: MovieFormatInputUpdate!): UpdateDeleteResponse
     "Delete a movie format"
     deleteMovieFormat(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a new movie language"
+    addMovieLanguage(token: String!, input: MovieLanguageInput!): AddResponse
+    "Update a movie language"
+    updateMovieLanguage(token: String!, _id: ID!, input: MovieLanguageInputUpdate!): UpdateDeleteResponse
+    "Delete a movie language"
+    deleteMovieLanguage(token: String!, _id: ID!): UpdateDeleteResponse
 
     "Add a room"
     addRoom(token: String!, input: RoomInput!): AddResponse

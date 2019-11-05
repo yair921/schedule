@@ -41,10 +41,17 @@ class CtrSchedule {
                 });
                 return resError
             }
+            let processDataArr = new Array();
+            let processData;
+            for (let i in objResult.result) {
+                processData = await CtrSchedule.processSchedule(objResult.result[i]);
+                if (processData.status)
+                    processDataArr.push(processData.result);
+            }
             return {
                 status: true,
                 message: null,
-                data: objResult.result
+                data: processDataArr
             };
         } catch (error) {
             errorHandler({
@@ -89,7 +96,7 @@ class CtrSchedule {
                 });
                 return resError
             }
-            let processData = await CtrSchedule.processSchedule(objResult.result[0]);
+            let processData = await CtrSchedule.processSchedule(objResult.result[0], args.idTheater);
             //console.log(processData);
             if (!processData.status) {
                 return {
@@ -112,11 +119,12 @@ class CtrSchedule {
         }
     }
 
-    static async processSchedule(data) {
+    static async processSchedule(data, idTheater) {
         try {
             let token = null;
             let objMovies = await ctrMovie.getAll(null, { token }, true);
-            let objRooms = await ctrRoom.getAll(null, { token }, true);
+            //let objRooms = await ctrRoom.getAll(null, { token }, true);
+            let objRooms = await ctrRoom.getByTheater(null, { token, idTheater }, true);
             if (!objMovies.status || !objRooms.status) {
                 return {
                     status: false,
@@ -126,21 +134,54 @@ class CtrSchedule {
 
             let rooms = objRooms.data;
             let movies = objMovies.data;
-
             let roomsResult = new Array();
 
-            data.rooms.forEach(room => {
-                for (let r in rooms) {
-                    if (rooms[r]._id.toString() === room.idRoom.toString()) {
+            // data.rooms.forEach(room => {
+            //     for (let r in rooms) {
+            //         if (rooms[r]._id.toString() === room.idRoom.toString()) {
+            //             roomsResult.push({
+            //                 ...room,
+            //                 roomNumber: rooms[r].roomNumber,
+            //                 roomName: rooms[r].roomName,
+            //                 movies: CtrSchedule.getMoviesDetails(movies, room)
+            //             });
+            //             break;
+            //         }
+            //     }
+            // });
+
+            let find = false;
+            rooms.forEach(room => {
+                if (data) {
+                    for (let r in data.rooms) {
+                        if (data.rooms[r].idRoom.toString() === room._id.toString()) {
+                            find = true;
+                            roomsResult.push({
+                                ...room,
+                                movies: CtrSchedule.getMoviesDetails(movies, data.rooms[r])
+                            });
+                            break;
+                        }
+                    }
+                    if (!find) {
                         roomsResult.push({
                             ...room,
-                            nombre: rooms[r].nombre,
-                            movies: CtrSchedule.getMoviesDetails(movies, room)
+                            // roomNumber: rooms[r].roomNumber,
+                            // roomName: rooms[r].roomName,
+                            movies: []
                         });
-                        break;
                     }
+                    find = false;
+                } else {
+                    roomsResult.push({
+                        ...room,
+                        movies: []
+                    });
                 }
             });
+
+
+
 
             let result = {
                 ...data,

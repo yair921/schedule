@@ -46,7 +46,7 @@ class CtrMovie {
             };
         } catch (error) {
             errorHandler({
-                method: `${className}.add`,
+                method: `${className}.getAll`,
                 message: `Unexpected error -> ${error}`
             });
             return resError;
@@ -74,7 +74,9 @@ class CtrMovie {
             dbName: config.db.programacion,
             collectionName,
             params: {
-                nombre: args.input.nombre
+                movieName: args.input.movieName,
+                idMovieFormat: ObjectID(args.input.idMovieFormat),
+                idMovieLanguage: ObjectID(args.input.idMovieLanguage)
             }
         });
         if (exist) {
@@ -88,7 +90,8 @@ class CtrMovie {
             let newObj = {
                 ...args.input,
                 idDistributor: ObjectID(args.input.idDistributor),
-                idsMovieFormat: args.input.idsMovieFormat.map(m => ObjectID(m)),
+                idMovieFormat: ObjectID(args.input.idMovieFormat),
+                idMovieLanguage: ObjectID(args.input.idMovieLanguage),
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -132,8 +135,10 @@ class CtrMovie {
             }
             if (args.input.idDistributor)
                 args.input.idDistributor = ObjectID(args.input.idDistributor);
-            if (args.input.idsMovieFormat)
-                args.input.idsMovieFormat = args.input.idsMovieFormat.map(m => ObjectID(m));
+            if (args.input.idMovieFormat)
+                args.input.idMovieFormat = ObjectID(args.input.idsMovieFormat);
+            if (args.input.idMovieLanguage)
+                args.input.idMovieLanguage = ObjectID(args.input.idsMovieLanguage);
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,

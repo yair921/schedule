@@ -9,7 +9,7 @@ const collectionName = 'room';
 
 class CtrRoom {
 
-    static async getAll(global, { token },isInternal) {
+    static async getAll(global, { token }, isInternal) {
 
         // Build object error.
         let resError = {
@@ -18,7 +18,7 @@ class CtrRoom {
         };
 
         // Validation permissions.
-        if(!isInternal){
+        if (!isInternal) {
             let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
             if (!auth.status) {
                 return {
@@ -48,7 +48,56 @@ class CtrRoom {
             };
         } catch (error) {
             errorHandler({
-                method: `${className}.add`,
+                method: `${className}.getAll`,
+                message: `Unexpected error -> ${error}`
+            });
+            return resError;
+        }
+    }
+
+    static async getByTheater(global, { token, idTheater }, isInternal) {
+
+        // Build object error.
+        let resError = {
+            ...config.messages.getFail,
+            data: null
+        };
+
+        // Validation permissions.
+        if (!isInternal) {
+            let auth = ctrAuth.validateLogin({ token, option: collectionName, action: config.actions.get });
+            if (!auth.status) {
+                return {
+                    ...resError,
+                    message: auth.message
+                };
+            }
+        }
+
+        try {
+            let objResult = await Db.find({
+                dbName: config.db.programacion,
+                collectionName,
+                params: {
+                    enabled: true,
+                    idTheater: ObjectID(idTheater)
+                }
+            });
+            if (!objResult.status) {
+                errorHandler({
+                    method: `${className}.getByTheater`,
+                    message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
+                });
+                return resError
+            }
+            return {
+                status: true,
+                message: null,
+                data: objResult.result
+            };
+        } catch (error) {
+            errorHandler({
+                method: `${className}.getByTheater`,
                 message: `Unexpected error -> ${error}`
             });
             return resError;
@@ -75,7 +124,10 @@ class CtrRoom {
         let exist = await Helper.validateIfExist({
             dbName: config.db.programacion,
             collectionName,
-            params: { nombre: args.input.nombre, idTheater: ObjectID(args.input.idTheater) }
+            params: {
+                roomNumber: args.input.roomNumber,
+                idTheater: ObjectID(args.input.idTheater)
+            }
         });
         if (exist) {
             return {
@@ -84,10 +136,12 @@ class CtrRoom {
                 _id: null
             };
         }
+
         try {
             let newObj = {
                 ...args.input,
                 idTheater: ObjectID(args.input.idTheater),
+                cleaningTimes: args.input.cleaningTimes.map(m => { return { ...m, idMovieFormat: ObjectID(m.idMovieFormat) } }),
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -129,8 +183,12 @@ class CtrRoom {
                     message: auth.message
                 };
             }
+
             if (args.input.idTheater)
                 args.input.idTheater = ObjectID(args.input.idTheater);
+            if (args.input.cleaningTimes)
+                args.input.cleaningTimes = args.input.cleaningTimes.map(m => { return { ...m, idMovieFormat: ObjectID(m.idMovieFormat) } });
+
             let objResult = await Db.update({
                 dbName: config.db.programacion,
                 collectionName,

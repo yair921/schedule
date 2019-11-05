@@ -2,6 +2,7 @@ const ctrDistributor = require('../controllers/ctrDistributor');
 const ctrRoomType = require('../controllers/ctrRoomType');
 const ctrTheater = require('../controllers/ctrTheater');
 const ctrMovieFormat = require('../controllers/ctrMovieFormat');
+const ctrMovieLanguage = require('../controllers/ctrMovieLanguage');
 const ctrRoom = require('../controllers/ctrRoom');
 const ctrMovie = require('../controllers/ctrMovie');
 const ctrUserOption = require('../controllers/ctrUserOption');
@@ -23,6 +24,9 @@ module.exports = {
     addMovieFormat: ctrMovieFormat.add,
     updateMovieFormat: ctrMovieFormat.update,
     deleteMovieFormat: ctrMovieFormat.delete,
+    addMovieLanguage: ctrMovieLanguage.add,
+    updateMovieLanguage: ctrMovieLanguage.update,
+    deleteMovieLanguage: ctrMovieLanguage.delete,
     addRoom: ctrRoom.add,
     updateRoom: ctrRoom.update,
     deleteRoom: ctrRoom.delete,

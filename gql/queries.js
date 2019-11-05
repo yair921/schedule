@@ -2,6 +2,7 @@ const ctrDistributor = require('../controllers/ctrDistributor');
 const ctrRoomType = require('../controllers/ctrRoomType');
 const ctrTheater = require('../controllers/ctrTheater');
 const ctrMovieFormat = require('../controllers/ctrMovieFormat');
+const ctrMovieLanguage = require('../controllers/ctrMovieLanguage');
 const ctrRoom = require('../controllers/ctrRoom');
 const ctrMovie = require('../controllers/ctrMovie');
 const ctrUserOption = require('../controllers/ctrUserOption');
@@ -17,6 +18,7 @@ module.exports = {
     getAllRoomType: ctrRoomType.getAll,
     getAllTheater: ctrTheater.getAll,
     getAllMovieFormat: ctrMovieFormat.getAll,
+    getAllMovieLanguage: ctrMovieLanguage.getAll,
     getAllRoom: ctrRoom.getAll,
     getAllMovie: ctrMovie.getAll,
     getAllUserOption: ctrUserOption.getAll,

@@ -3,13 +3,12 @@ const ctrAuth = require('./ctrAuth');
 const Db = require('../utility/db');
 const config = require('../config');
 const Helper = require('../utility/helper');
-const className = 'CtrTheater';
-const collectionName = 'theater';
+const className = 'CtrMovieLanguage';
+const collectionName = 'movie_language';
 
-class CtrTheater {
+class CtrMovieFormat {
+
     static async getAll(global, { token }) {
-
-        // Build object error.
         let resError = {
             ...config.messages.getFail,
             data: null
@@ -53,7 +52,7 @@ class CtrTheater {
 
     static async add(global, args) {
 
-        // Build object error.
+        // Build object error.        
         let resError = {
             ...config.messages.addFail,
             _id: null
@@ -71,12 +70,12 @@ class CtrTheater {
         let exist = await Helper.validateIfExist({
             dbName: config.db.programacion,
             collectionName,
-            params: { nombre: args.input.nombre }
+            params: { movieLanguageName: args.input.movieLanguageName }
         });
         if (exist) {
             return {
                 status: false,
-                message: `The thater already exist in database.`,
+                message: `The language already exist!`,
                 _id: null
             };
         }
@@ -183,4 +182,4 @@ class CtrTheater {
     }
 }
 
-module.exports = CtrTheater;
+module.exports = CtrMovieFormat;
