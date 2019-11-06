@@ -158,6 +158,7 @@ class CtrSchedule {
                             find = true;
                             roomsResult.push({
                                 ...room,
+                                idRoom: room._id,
                                 movies: CtrSchedule.getMoviesDetails(movies, data.rooms[r])
                             });
                             break;
@@ -166,8 +167,7 @@ class CtrSchedule {
                     if (!find) {
                         roomsResult.push({
                             ...room,
-                            // roomNumber: rooms[r].roomNumber,
-                            // roomName: rooms[r].roomName,
+                            idRoom: room._id,
                             movies: []
                         });
                     }
@@ -175,6 +175,7 @@ class CtrSchedule {
                 } else {
                     roomsResult.push({
                         ...room,
+                        idRoom: room._id,
                         movies: []
                     });
                 }
