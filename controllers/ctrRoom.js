@@ -141,7 +141,7 @@ class CtrRoom {
             let newObj = {
                 ...args.input,
                 idTheater: ObjectID(args.input.idTheater),
-                cleaningTimes: args.input.cleaningTimes.map(m => { return { ...m, idMovieFormat: ObjectID(m.idMovieFormat) } }),
+                supportedFormats: args.input.supportedFormats.map(m => { return { ...m, idMovieFormat: ObjectID(m.idMovieFormat) } }),
                 active: true,
                 enabled: true,
                 create_at: new Date(),
@@ -186,8 +186,8 @@ class CtrRoom {
 
             if (args.input.idTheater)
                 args.input.idTheater = ObjectID(args.input.idTheater);
-            if (args.input.cleaningTimes)
-                args.input.cleaningTimes = args.input.cleaningTimes.map(m => { return { ...m, idMovieFormat: ObjectID(m.idMovieFormat) } });
+            if (args.input.supportedFormats)
+                args.input.supportedFormats = args.input.supportedFormats.map(m => { return { ...m, idMovieFormat: ObjectID(m.idMovieFormat) } });
 
             let objResult = await Db.update({
                 dbName: config.db.programacion,

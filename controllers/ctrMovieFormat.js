@@ -70,7 +70,7 @@ class CtrMovieFormat {
         let exist = await Helper.validateIfExist({
             dbName: config.db.programacion,
             collectionName,
-            params: { nombre: args.input.nombre }
+            params: { movieFormatName: args.input.movieFormatName }
         });
         if (exist) {
             return {

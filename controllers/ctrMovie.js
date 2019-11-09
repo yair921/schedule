@@ -27,23 +27,72 @@ class CtrMovie {
         }
 
         try {
-            let objResult = await Db.find({
+            // let objResult = await Db.find({
+            //     dbName: config.db.programacion,
+            //     collectionName,
+            //     params: { enabled: true }
+            // });
+            // if (!objResult.status) {
+            //     errorHandler({
+            //         method: `${className}.getAll`,
+            //         message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
+            //     });
+            //     return resError
+            // }
+            // return {
+            //     status: true,
+            //     message: null,
+            //     data: objResult.result
+            // };
+
+
+            // Aggregation function
+            let argsAggregation = {
                 dbName: config.db.programacion,
                 collectionName,
-                params: { enabled: true }
-            });
-            if (!objResult.status) {
-                errorHandler({
-                    method: `${className}.getAll`,
-                    message: `${config.messages.errorConnectionDb} -> ${objCnn.message}`
-                });
-                return resError
+                pipeline: [
+                    {
+                        $lookup:
+                        {
+                            from: 'movie_format',
+                            localField: 'idMovieFormat',
+                            foreignField: '_id',
+                            as: 'movieFormat'
+                        }
+                    },
+                    {
+                        $lookup:
+                        {
+                            from: 'movie_language',
+                            localField: 'idMovieLanguage',
+                            foreignField: '_id',
+                            as: 'movieLanguage'
+                        }
+                    }
+                ]
+            };
+
+            let objAggrupate = await Db.findAggrupate(argsAggregation);
+            if (!objAggrupate.status) {
+                return {
+                    status: false,
+                    message: `The login failed.`,
+                    token: null
+                };
             }
+            let result = objAggrupate.result.map(m => {
+                return {
+                    ...m,
+                    movieName: `${m.movieName} - ${m.movieFormat[0].movieFormatName} - ${m.movieLanguage[0].movieLanguageName}`
+                }
+            });
             return {
                 status: true,
                 message: null,
-                data: objResult.result
+                data: result
             };
+
+
         } catch (error) {
             errorHandler({
                 method: `${className}.getAll`,

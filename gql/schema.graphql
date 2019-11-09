@@ -80,7 +80,7 @@ input TheaterInputUpdate {
 
 type MovieFormat {
     _id: ID
-    nombre: String
+    movieFormatName: String
     active: Boolean
 }
 
@@ -92,11 +92,11 @@ type MovieFormatResGetAll {
 }
 
 input MovieFormatInput {
-    nombre: String!
+    movieFormatName: String!
 }
 
 input MovieFormatInputUpdate {
-    nombre: String
+    movieFormatName: String
     active: Boolean
 }
 
@@ -140,11 +140,11 @@ type Room {
     roomNumber: Int
     roomName: String
     numberChairs: Int
-    cleaningTimes: [RoomCleanigTime]
+    supportedFormats: [RoomSupportedFormats]
     active: Boolean
 }
 
-type RoomCleanigTime {
+type RoomSupportedFormats {
     idMovieFormat: ID
     cleaningTime: Int
 }
@@ -155,7 +155,7 @@ type RoomResGetAll {
     data: [Room]
 }
 
-input RoomCleanigTimeInput {
+input RoomSupportedFormatsInput {
     idMovieFormat: ID
     cleaningTime: Int
 }
@@ -165,7 +165,7 @@ input RoomInput {
     roomNumber: Int!
     roomName: String!
     numberChairs: Int!
-    cleaningTimes: [RoomCleanigTimeInput!]!
+    supportedFormats: [RoomSupportedFormatsInput!]!
 }
 
 input RoomInputUpdate {
@@ -173,7 +173,7 @@ input RoomInputUpdate {
     roomNumber: Int
     roomName: String
     numberChairs: Int
-    cleaningTimes: [RoomCleanigTimeInput!]
+    supportedFormats: [RoomSupportedFormatsInput!]
     active: Boolean
 }
 
@@ -382,6 +382,7 @@ type ScheduleRoom {
     idRoom: ID
     roomNumber: Int
     roomName: String
+    supportedFormats: [RoomSupportedFormats]
     movies: [ScheduleMovies
     ]
 }
