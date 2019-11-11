@@ -366,16 +366,24 @@ input PeriodInputUpdate {
 
 
 
+
+
+
+
 type ScheduleMovies {
     idMovie: ID
     movieName: String
     duration: Int
-    trailer: Int
-    short: Int
-    pattern: Int
+    scheduleAttributes: [ScheduleScheduleAttribute]
     cleaningTime: Int
     startAt: String
     endAt: String
+}
+
+type ScheduleScheduleAttribute{
+    idScheduleAttribute: ID
+    scheduleAttributeName: String
+    duration: Int
 }
 
 type ScheduleRoom {
@@ -411,12 +419,17 @@ type ScheduleResGetOne {
 
 input ScheduleMoviesInput {
     idMovie: ID
-    trailer: Int
-    short: Int
-    pattern: Int
+    scheduleAttributes: [ScheduleScheduleAttributeInput]
     cleaningTime: Int
     startAt: String
     endAt: String
+}
+
+input ScheduleScheduleAttributeInput{
+    idScheduleAttribute: ID
+    scheduleAttributeName: String
+    duration: Int
+
 }
 
 input ScheduleRoomInput {
@@ -444,6 +457,38 @@ input ScheduleInputUpdate {
 
 
 
+
+
+
+
+
+
+
+
+type ScheduleAttribute{
+    _id: ID
+    scheduleAttributeName: String
+    defaultDuration: Int
+    active: Boolean
+}
+
+type ScheduleAttributeGetAll {
+    status: Boolean
+    message: String
+    data: [ScheduleAttribute
+    ]
+}
+
+input ScheduleAttributeInput{
+    scheduleAttributeName: String
+    defaultDuration: Int
+}
+
+input ScheduleAttributeUpdate{
+    scheduleAttributeName: String
+    defaultDuration: Int
+    active: Boolean
+}
 
 
 
@@ -488,6 +533,8 @@ type Query {
     "Get Schedule"
     getAllSchedule(token: String!): ScheduleResGetAll
     getOneSchedule(token: String!, idTheater: String!, idPeriod: String!): ScheduleResGetOne
+    "Get ScheduleAttribute"
+    getAllScheduleAttribute(token: String!): ScheduleAttributeGetAll
     "Get login"
     getLogin(input: LoginInputGet): Login
 }
@@ -576,4 +623,11 @@ type Mutation {
     updateSchedule(token: String!, _id: ID!, input: ScheduleInputUpdate!): UpdateDeleteResponse
     "Delete a schedule"
     deleteSchedule(token: String!, _id: ID!): UpdateDeleteResponse
+
+    "Add a scheduleAttribute"
+    addScheduleAttribute(token: String!, input: ScheduleAttributeInput!): AddResponse
+    "Update scheduleAttibute"
+    updateScheduleAttribute(token: String!, _id: ID!, input: ScheduleAttributeUpdate!): UpdateDeleteResponse
+    "Delete a scheduleAttibute"
+    deleteScheduleAttribute(token: String!, _id: ID!): UpdateDeleteResponse
 }

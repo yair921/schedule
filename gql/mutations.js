@@ -10,6 +10,8 @@ const ctrUserRol = require('../controllers/ctrUserRol');
 const ctrUser = require('../controllers/ctrUser');
 const ctrPeriod = require('../controllers/ctrPeriod');
 const ctrSchedule = require('../controllers/ctrSchedule');
+const ctrScheduleAttribute = require('../controllers/ctrScheduleAttribute');
+
 
 module.exports = {
     addDistributor: ctrDistributor.add,
@@ -47,5 +49,11 @@ module.exports = {
     deletePeriod: ctrPeriod.delete,
     addSchedule: ctrSchedule.add,
     updateSchedule: ctrSchedule.update,
-    deleteSchedule: ctrSchedule.delete
+    deleteSchedule: ctrSchedule.delete,
+    addScheduleAttribute: ctrScheduleAttribute.add,
+    updateScheduleAttribute: ctrScheduleAttribute.update,
+    deleteScheduleAttribute: ctrScheduleAttribute.delete
+
+
+    
 }

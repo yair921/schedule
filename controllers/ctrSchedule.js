@@ -6,6 +6,7 @@ const config = require('../config');
 const Helper = require('../utility/helper');
 const ctrRoom = require('./ctrRoom');
 const ctrMovie = require('./ctrMovie');
+const ctrScheduleAttribute = require('./ctrScheduleAttribute');
 const className = 'CtrSchedule';
 const collectionName = 'schedule';
 
@@ -123,9 +124,9 @@ class CtrSchedule {
         try {
             let token = null;
             let objMovies = await ctrMovie.getAll(null, { token }, true);
-            //let objRooms = await ctrRoom.getAll(null, { token }, true);
             let objRooms = await ctrRoom.getByTheater(null, { token, idTheater }, true);
-            if (!objMovies.status || !objRooms.status) {
+            let objScheduleAttributes = await ctrScheduleAttribute.getAll(null, { token, idTheater }, true);
+            if (!objMovies.status || !objRooms.status || !objScheduleAttributes.status) {
                 return {
                     status: false,
                     message: 'Error getting movies or rooms for schedule'
@@ -134,6 +135,7 @@ class CtrSchedule {
 
             let rooms = objRooms.data;
             let movies = objMovies.data;
+            let scheduleAttributes = objScheduleAttributes.data;
             let roomsResult = new Array();
 
             // data.rooms.forEach(room => {
@@ -159,7 +161,7 @@ class CtrSchedule {
                             roomsResult.push({
                                 ...room,
                                 idRoom: room._id,
-                                movies: CtrSchedule.getMoviesDetails(movies, data.rooms[r])
+                                movies: CtrSchedule.getMoviesDetails(movies, data.rooms[r], scheduleAttributes)
                             });
                             break;
                         }
@@ -204,14 +206,24 @@ class CtrSchedule {
         }
     }
 
-    static getMoviesDetails(movies, room) {
+    static getMoviesDetails(movies, room, scheduleAttributes) {
         let moviesResult = new Array();
         room.movies.forEach(movie => {
             for (let m in movies) {
                 if (movies[m]._id.toString() === movie.idMovie.toString()) {
                     moviesResult.push({
                         ...movie,
-                        ...movies[m]
+                        ...movies[m],
+                        scheduleAttributes: movie.scheduleAttributes.map(sa => {
+                            for (let s in scheduleAttributes) {
+                                if (sa.idScheduleAttribute.toString() === scheduleAttributes[s]._id.toString()) {
+                                    return {
+                                        ...sa,
+                                        scheduleAttributeName: scheduleAttributes[s].scheduleAttributeName
+                                    }
+                                }
+                            }
+                        })
                     });
                     break;
                 }

@@ -11,6 +11,7 @@ const ctrUser = require('../controllers/ctrUser');
 const ctrAuth = require('../controllers/ctrAuth');
 const ctrPeriod = require('../controllers/ctrPeriod');
 const ctrSchedule = require('../controllers/ctrSchedule');
+const ctrScheduleAttribute = require('../controllers/ctrScheduleAttribute');
 
 
 module.exports = {
@@ -27,5 +28,6 @@ module.exports = {
     getAllPeriod: ctrPeriod.getAll,
     getAllSchedule: ctrSchedule.getAll,
     getOneSchedule: ctrSchedule.getOne,
+    getAllScheduleAttribute: ctrScheduleAttribute.getAll,
     getLogin: ctrAuth.login
 }
