@@ -97,7 +97,7 @@ class CtrSchedule {
                 });
                 return resError
             }
-            let processData = await CtrSchedule.processSchedule(objResult.result[0], args.idTheater);
+            let processData = await CtrSchedule.processSchedule(objResult.result[0], args.idTheater, args.idPeriod);
             //console.log(processData);
             if (!processData.status) {
                 return {
@@ -120,7 +120,7 @@ class CtrSchedule {
         }
     }
 
-    static async processSchedule(data, idTheater) {
+    static async processSchedule(data, idTheater, idPeriod) {
         try {
             let token = null;
             let objMovies = await ctrMovie.getAll(null, { token }, true);
@@ -188,6 +188,8 @@ class CtrSchedule {
 
             let result = {
                 ...data,
+                idTheater,
+                idPeriod,
                 rooms: roomsResult
             }
             return {

@@ -46,6 +46,12 @@ class Helper {
                     return {
                         ...m,
                         idMovie: ObjectID(m.idMovie),
+                        scheduleAttributes: m.scheduleAttributes.map(sa => {
+                            return {
+                                ...sa,
+                                idScheduleAttribute: ObjectID(sa.idScheduleAttribute)
+                            }
+                        }),
                         startAt: new Date(m.startAt),
                         endAt: new Date(m.endAt)
                     }
