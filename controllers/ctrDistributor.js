@@ -16,7 +16,7 @@ class CtrDistributor {
             data: [
                 {
                     _id: null,
-                    nombre: null,
+                    nameDistributor: null,
                     id_filcal: null,
                     active: null
                 }

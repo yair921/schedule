@@ -71,7 +71,7 @@ class CtrUserRol {
             dbName: config.db.programacion,
             collectionName,
             params: {
-                nombre: args.input.nombre
+                nameUserRol: args.input.nameUserRol
             }
         });
         if (exist) {

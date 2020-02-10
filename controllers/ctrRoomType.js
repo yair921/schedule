@@ -72,7 +72,7 @@ class CtrRoomType {
         let exist = await Helper.validateIfExist({
             dbName: config.db.programacion,
             collectionName,
-            params: { nombre: args.input.nombre }
+            params: { nameRoomType: args.input.nameRoomType }
         });
         if (exist) {
             return {

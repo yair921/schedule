@@ -20,7 +20,7 @@ module.exports = {
         delete: 'delete'
     },
     db: {
-        programacion: 'procinal-programacion'
+        programacion: 'schedule'
     },
     secretKey: 'th3S3cr3tK3yM0$tP0pul4r'
 };

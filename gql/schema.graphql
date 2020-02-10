@@ -12,7 +12,7 @@ type UpdateDeleteResponse {
 type Distributor {
     _id: ID
     id_fiscal: String
-    nombre: String
+    nameDistributor: String
     active: Boolean
 }
 
@@ -24,19 +24,19 @@ type DistributorResGetAll {
 }
 
 input DistributorInput {
-    nombre: String!
+    nameDistributor: String!
     id_fiscal: String!
 }
 
 input DistributorInputUpdate {
-    nombre: String
+    nameDistributor: String
     id_fiscal: String
     active: Boolean
 }
 
 type RoomType {
     _id: ID
-    nombre: String
+    nameRoomType: String
     active: Boolean
 }
 
@@ -48,17 +48,17 @@ type RoomTypeResGetAll {
 }
 
 input RoomTypeInput {
-    nombre: String!
+    nameRoomType: String!
 }
 
 input RoomTypeInputUpdate {
-    nombre: String
+    nameRoomType: String
     active: Boolean
 }
 
 type Theater {
     _id: ID
-    nombre: String
+    nameTheater: String
     active: Boolean
 }
 
@@ -70,11 +70,11 @@ type TheaterResGetAll {
 }
 
 input TheaterInput {
-    nombre: String!
+    nameTheater: String!
 }
 
 input TheaterInputUpdate {
-    nombre: String
+    nameTheater: String
     active: Boolean
 }
 
@@ -251,7 +251,7 @@ input UserOptionInputUpdate {
 
 type UserRol {
     _id: ID
-    nombre: String
+    nameUserRol: String
     permissions: [UserRolPermission!
     ]
     active: Boolean
@@ -279,13 +279,13 @@ type UserRolResGetAll {
 }
 
 input UserRolInput {
-    nombre: String!
+    nameUserRol: String!
     permissions: [UserRolPermissionInput!
     ]!
 }
 
 input UserRolInputUpdate {
-    nombre: String
+    nameUserRol: String
     permissions: [UserRolPermissionInput!
     ]
     active: Boolean

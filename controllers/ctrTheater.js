@@ -71,7 +71,7 @@ class CtrTheater {
         let exist = await Helper.validateIfExist({
             dbName: config.db.programacion,
             collectionName,
-            params: { nombre: args.input.nombre }
+            params: { nameTheater: args.input.nameTheater }
         });
         if (exist) {
             return {
